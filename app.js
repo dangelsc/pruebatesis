@@ -1,3 +1,13 @@
+/**
+ * nodejs
+ * >npm install express-generator -g
+ * >npm install nodemon -g 
+ * >express --view=ejs  mitesis
+ * >cd mitesis
+ * >npm install
+ * >nodemon
+*/
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -24,6 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/tesis', {useNewUrlParser: true});
 const db = mongoose.connection;
+mongoose.set('debug', true);
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   console.log('conectados!!!!!');

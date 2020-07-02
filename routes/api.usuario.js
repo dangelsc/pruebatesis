@@ -9,9 +9,9 @@ router.get('/',control.lista );
 router.post('/',control.nuevo);
 //router.post('/roles',control.rol);
 //editar
-router.put('/',control.editar);
+router.put('/:id',control.editar);
 //borrar
-router.delete('/',control.borrar);
+router.delete('/:id',control.borrar);
 /**  rest api
  * get-> listar, busquedas
  * post->insertar
