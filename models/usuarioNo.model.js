@@ -10,6 +10,8 @@ var modelo =
     a_materno:String,
     ci:String,
     estado:Number,
+    login:String,
+    password:String,
     rol:{
       tipo:String,
       nombre:String,

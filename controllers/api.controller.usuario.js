@@ -1,5 +1,8 @@
 var Usuario=require('../models/usuario.model');
 var Usuario2=require('../models/usuarioNo.model');
+var jwt=require('jsonwebtoken');
+var config=require('../config/config');
+var bcrypt=require('bcrypt');
 async function  list(req,res,next){
     //select *from tbpersona where
     //asincrona
@@ -57,6 +60,10 @@ function add(req,res,next){
     //req.params.ci
     req.body.estado=1;
     req.body.fecha=Date.now();
+    console.log(req.body);
+    console.log(req.body.password+'---->'+config.numeroSaltos);
+    let encrypt=bcrypt.hashSync(req.body.password,config.numeroSaltos);
+    req.body.password=encrypt;
     let nuevo=new Usuario2(req.body);
     let val=nuevo.validateSync();
     if(val)
@@ -95,9 +102,33 @@ function edit(req,res,next){
         return res.status(400).json({estado:1,mgs:'Datos borrado!!!'});
     });
 }
+function login(req,res,next){
+    Usuario2.findOne({login:req.body.login},(err,user)=>{
+        if(err)
+            return res.status(400).json({estado:0,error:'No permitido 1'+err});
+        if(!user)
+            return res.status(400).json({estado:0,error:'No permitido 2'});
+        ///md5-> noooo usar
+        //console.log(user);
+        console.log(req.body.password+'----->'+user.password);
+        try{
+            if(bcrypt.compareSync(req.body.password,user.password))
+            {
+                let token=jwt.sign({
+                        id:user._id,
+                        exp: Math.floor(Date.now() / 1000) + (60 * 60),
+                    },config.llave);
+                return res.status(200).json({estado:1,token:token,msg:'Acceso correcto'});
+            }
+        }catch(e){
+            return res.status(400).json({estado:0,error:'No permitido 3'});
+        }
+    });
+}
 module.exports={
     lista:list,
     nuevo:add,
     borrar:remove,
-    editar:edit
+    editar:edit,
+    login:login
 }
