@@ -17,7 +17,10 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var apiusuario  = require('./routes/api.usuario');
-
+var apimedico  = require('./routes/api.medico');
+var upload = require('./routes/upload')
+var imagenesRoutes = require('./routes/images')
+var middle=require('./middleware/controlAccess');
 var app = express();
 
 // view engine setup
@@ -51,13 +54,16 @@ try {
   console.error('Unable to connect to the database:', error);
 }
 ///////////////////////////////////////////
-
+app.use(middle.cord);
 ///dominio.com
 ///localhost:3000
 app.use('/', indexRouter);
 //dominio.com/users/
 app.use('/users', usersRouter);
 app.use('/api/usuario',apiusuario);
+app.use('/api/medico',apimedico);
+app.use('/api/upload',upload)
+app.use('/api/img', imagenesRoutes);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

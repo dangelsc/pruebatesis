@@ -1,12 +1,16 @@
 var express = require('express');
 var router = express.Router();
-var control = require('../controllers/api.controller.usuario');
+var control = require('../controllers/api.controller.medico');
 var verifica=require('../middleware/controlAccess');
 /* GET home page. */
 //dominio.com/api/usuario/
 //listar
 router.get('/',//verifica.control,
 control.lista );
+router.get('/busqueda/:busqueda',//verifica.control,
+control.buscar );
+router.get('/medico/:id',//verifica.control,
+control.getitem );
 //nuevo
 router.post('/',//verifica.control,
 control.nuevo);
@@ -14,20 +18,6 @@ control.nuevo);
 //editar
 router.put('/:id',verifica.control,control.editar);
 //borrar
-router.delete('/:id',verifica.control
-,control.borrar);
-//login
-router.post('/login',control.login);
-/**  rest api
- * get-> listar, busquedas
- * post->insertar
- * put->editar
- * delete->borrar
- * 
-*/
-
-//ORM
-//mysql,postgres,sqlserver-> Sequelize()
-//mongodb,tink,redis,->mongoose,
+router.delete('/:id',verifica.control,control.borrar);
 
 module.exports = router;
